@@ -14,20 +14,20 @@ steps:
 
 # Package PowerShell Scripts as Artifact
 - task: PowerShell@2
-  displayName: 'Validate PowerShell Scripts'
+  displayName: 'Validate Terraform files'
   inputs:
     targetType: 'inline'
     script: |
-      Write-Output "Packaging PowerShell scripts for drop"
+      Write-Output "Packaging Terraform files for drop"
       if (Test-Path '$(Build.SourcesDirectory)') {
-        Write-Output "PowerShell scripts directory found!"
+        Write-Output "Terraform files directory found!"
       } else {
-        Write-Error "PowerShell scripts directory not found!"
+        Write-Error "Terraform files directory not found!"
       }
 
 # Publish Artifact
 - task: PublishPipelineArtifact@1
-  displayName: 'Publish PowerShellScripts Artifact'
+  displayName: 'Publish TerraformFiles Artifact'
   inputs:
     targetPath: '$(Build.SourcesDirectory)'
-    artifact: 'PowerShellScripts'
+    artifact: 'Drop'
