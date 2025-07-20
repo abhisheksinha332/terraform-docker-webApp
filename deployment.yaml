@@ -1,0 +1,33 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  
+- script: |
+    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+    tflint
+  displayName: 'Run TFLint'
+
+
+# Package PowerShell Scripts as Artifact
+- task: PowerShell@2
+  displayName: 'Validate PowerShell Scripts'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Output "Packaging PowerShell scripts for drop"
+      if (Test-Path '$(Build.SourcesDirectory)') {
+        Write-Output "PowerShell scripts directory found!"
+      } else {
+        Write-Error "PowerShell scripts directory not found!"
+      }
+
+# Publish Artifact
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish PowerShellScripts Artifact'
+  inputs:
+    targetPath: '$(Build.SourcesDirectory)'
+    artifact: 'PowerShellScripts'

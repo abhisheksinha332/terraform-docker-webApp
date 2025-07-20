@@ -1,0 +1,7 @@
+dev.tfvars
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfplan
+*.log
+*.exe
