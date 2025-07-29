@@ -16,7 +16,7 @@ steps:
   displayName: 'Run TFLint'
 
 # Install Terraform
-- task: TerraformInstaller@1
+- task: hashicorpTerraformInstaller@1
   displayName: 'Install Terraform'
   inputs:
     terraformVersion: '$(TF_VERSION)'
