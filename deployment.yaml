@@ -5,38 +5,41 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  TF_VERSION: '1.12.0'
+  TF_VERSION: '1.5.7'
 
 steps:
-  
+
+# TFLint
 - script: |
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
     tflint
   displayName: 'Run TFLint'
 
+# Install Terraform
 - task: TerraformInstaller@1
   displayName: 'Install Terraform'
   inputs:
     terraformVersion: '$(TF_VERSION)'
 
+# Terraform Init
 - script: |
     terraform init
   workingDirectory: $(Build.SourcesDirectory)
   displayName: 'Terraform Init'
 
+# Terraform Validate
 - script: |
     terraform validate
   workingDirectory: $(Build.SourcesDirectory)
   displayName: 'Terraform Validate'
 
-
-# Package PowerShell Scripts as Artifact
+# Package Files as Artifact
 - task: PowerShell@2
-  displayName: 'Validate Terraform files'
+  displayName: 'Check Terraform Directory'
   inputs:
     targetType: 'inline'
     script: |
-      Write-Output "Packaging Terraform files for drop"
+      Write-Output "Checking for Terraform files"
       if (Test-Path '$(Build.SourcesDirectory)') {
         Write-Output "Terraform files directory found!"
       } else {
@@ -48,4 +51,4 @@ steps:
   displayName: 'Publish TerraformFiles Artifact'
   inputs:
     targetPath: '$(Build.SourcesDirectory)'
-    artifact: 'Drop'
+    artifact: 'TerraformFiles'
