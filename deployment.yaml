@@ -15,11 +15,21 @@ steps:
     tflint
   displayName: 'Run TFLint'
 
-# Install Terraform
-- task: hashicorpTerraformInstaller@1
-  displayName: 'Install Terraform'
+
+- task: UsePythonVersion@0
   inputs:
-    terraformVersion: '$(TF_VERSION)'
+    versionSpec: '3.x'
+    addToPath: true
+
+# Install Terraform
+- script: |
+    sudo apt-get update
+    sudo apt-get install -y unzip
+    curl -LO https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
+    unzip terraform_1.5.7_linux_amd64.zip
+    sudo mv terraform /usr/local/bin/
+    terraform version
+  displayName: 'Install Terraform Manually'
 
 # Terraform Init
 - script: |
